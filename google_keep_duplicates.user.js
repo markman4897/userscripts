@@ -3,7 +3,6 @@
 // @description Adds a way to search for duplicate lines in google keep. (doesn't work with tick boxes)
 // @include     *keep.google.com*
 // @version     1.2
-// @grant       none
 // ==/UserScript==
 
 /*
@@ -33,12 +32,12 @@ document.getElementById ("dupButton").addEventListener("click", duplicates);
 function duplicates() {
   // div we want to check for duplicates
   var dupes_field = document.getElementsByClassName("IZ65Hb-s2gQvd")[document.getElementsByClassName("IZ65Hb-s2gQvd").length -1].querySelectorAll("*")[5].innerHTML;
-  
+
   // splits for later use
   var arr = dupes_field.split("<br>");
   // makes everything lower case (just in case), splits by "- " and joins back without so we get rid of it, splits by "<br>" so we have one line per array element, sorts so duplicates are next to each other (for easier detection later)
   out = dupes_field.toLowerCase().split("- ").join("").split("<br>").sort();
-  
+
   var dupes = [];
   // detects duplicates and puts them in array (dupes)
   for (var i = 0; i < out.length - 1; i++) {
@@ -46,7 +45,7 @@ function duplicates() {
         dupes.push(out[i]);
     }
 	}
-  
+
   // prepares new innerHTML for the original div
   for (var i = 0; i < arr.length; i++) {
     for (var j = 0; j < dupes.length; j++) {
@@ -55,7 +54,7 @@ function duplicates() {
       }
     }
 	}
-  
+
   // joining back the colorised things
   result = arr.join("<br>");
   // writing them to dom
