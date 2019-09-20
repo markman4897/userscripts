@@ -6,6 +6,18 @@
 // @grant       none
 // ==/UserScript==
 
+/*
+Versions:
+= 1.2
+- made it case not sensitive
+= 1.1
+- uses <mark> instead of <span style="color:red>
+
+= 1.0
+- adds button
+- button colors the identical lines (ignores "- ")
+*/
+
 // defining button attributes
 var btn = document.createElement("BUTTON");
 btn.innerHTML = "DUP";
