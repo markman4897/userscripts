@@ -11,7 +11,6 @@ Versions:
 - made it case not sensitive
 = 1.1
 - uses <mark> instead of <span style="color:red>
-
 = 1.0
 - adds button
 - button colors the identical lines (ignores "- ")
