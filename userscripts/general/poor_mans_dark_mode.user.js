@@ -9,8 +9,9 @@
 // @author       markman4897
 // @match        *://*/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
-// @grant        none
-// @run-at       context-menu
+// @grant        GM.getValue
+// @grant        GM.setValue
+// @run-at       document-body
 // ==/UserScript==
 
 (function() {
@@ -34,7 +35,8 @@
             display: flex;
             align-items: center;
             gap: 0.5em;
-            opacity: 0.7
+            opacity: 0.7;
+            z-index: 100000;
         }
         #poor-mans-dark-mode label{
             user-select: none
@@ -53,13 +55,20 @@
 
     const pmdm_checkbox = div.querySelector('#poor-mans-dark-mode-checkbox');
 
-    pmdm_checkbox.addEventListener('change', () => {
+    const toggleDarkMode = () => {
         if (pmdm_checkbox.checked) {
             document.documentElement.classList.add("dark-mode-on")
         } else {
             document.documentElement.classList.remove("dark-mode-on")
         }
-    });
+
+        GM.setValue('poor-mans-dark-mode-checkbox', pmdm_checkbox.checked);
+    }
+
+    pmdm_checkbox.addEventListener('change', toggleDarkMode);
 
     document.body.appendChild(div);
+
+    pmdm_checkbox.checked = GM.getValue('poor-mans-dark-mode-checkbox', false);
+    toggleDarkMode();
 })();
