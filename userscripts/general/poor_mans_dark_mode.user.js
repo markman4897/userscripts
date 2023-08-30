@@ -2,7 +2,7 @@
 // @name         Poor man's Dark Mode
 // @description  Adds a small box on bottom right that allows you to toggle dark mode.
 // @copyright    ISC licence, https://raw.githubusercontent.com/markman4897/userscripts/master/LICENCE.md
-// @version      0.1
+// @version      0.2
 // @namespace    https://github.com/markman4897/userscripts
 // @downloadURL  https://raw.githubusercontent.com/markman4897/userscripts/master/userscripts/general/poor_mans_dark_mode.user.js
 // @updateURL    https://raw.githubusercontent.com/markman4897/userscripts/master/userscripts/general/poor_mans_dark_mode.user.js
