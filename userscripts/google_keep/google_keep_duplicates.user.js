@@ -1,72 +1,124 @@
 // ==UserScript==
-// @name         Poor man's Dark Mode
-// @description  Adds a small box on bottom right that allows you to toggle dark mode.
-// @copyright    ISC licence, https://raw.githubusercontent.com/markman4897/userscripts/master/LICENCE.md
-// @version      0.4
-// @namespace    https://github.com/markman4897/userscripts
-// @downloadURL  https://raw.githubusercontent.com/markman4897/userscripts/master/userscripts/general/poor_mans_dark_mode.user.js
-// @updateURL    https://raw.githubusercontent.com/markman4897/userscripts/master/userscripts/general/poor_mans_dark_mode.user.js
-// @author       markman4897
-// @match        *://*/*
-// @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
-// @grant        GM.addStyle
-// @grant        GM.getValue
-// @grant        GM.setValue
-// @run-at       document-body
+// @name        Google Keep duplicates
+// @description Adds a way to search for duplicate lines in google keep. (doesn't work with tick boxes)
+// @include     *keep.google.com*
+// @grant       GM_addStyle
+// @version     1.3
+// @namespace   https://github.com/markman4897/userscripts
+// @downloadURL https://raw.githubusercontent.com/markman4897/userscripts/master/userscripts/google_keep/google_keep_duplicates.user.js
+// @updateURL   https://raw.githubusercontent.com/markman4897/userscripts/master/userscripts/google_keep/google_keep_duplicates.user.js
+// @author      markman4897
+// @icon        https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // ==/UserScript==
 
-(async () => {
-    'use strict';
+/*
+Versions:
+= 1.3
+- makes alert when done (so you know its done even if nothing is marked)
+- migrating style to GM_addStyle tag
+= 1.2
+- made it case not sensitive
+= 1.1
+- uses <mark> instead of <span style="color:red>
+= 1.0
+- adds button
+- button colors the identical lines (ignores "- ")
+*/
 
-    GM.addStyle(`
-        #poor-mans-dark-mode {
-            position: fixed;
-            bottom: 1em;
-            right: 1em;
-            height: 3em;
-            background-color: #AAA;
-            border-radius: 0.5em;
-            padding: 0.5em;
-            font-size: 0.6em;
-            font-weight: bold;
-            color: #113;
-            display: flex;
-            align-items: center;
-            gap: 0.5em;
-            opacity: 0.7;
-            z-index: 100000;
-        }
-        #poor-mans-dark-mode label {
-            user-select: none
-        }
-        html.dark-mode-on {
-            filter: invert(100%)
-        }
-        html.dark-mode-on img,
-        html.dark-mode-on svg {
-            filter: invert(100%)
-    }`);
+GM_addStyle(`
+#dupButton {
+position:fixed;
+right:50px;
+bottom:50px;
+z-index:9999;
+background-color: #202124;
+border-style: solid;
+border-width: 1px;
+border-color: #5f6368;
+color: #e8eaed;
+padding: 15px 32px;
+text-align: center;
+margin: 4px 2px;
+}
 
-    let div = document.createElement('div');
-    div.id = 'poor-mans-dark-mode';
-    div.innerHTML = '<input type="checkbox" id="poor-mans-dark-mode-checkbox"><label for="poor-mans-dark-mode-checkbox">Invert Colours</label>';
+#toast{
+position:fixed;
+right:200px;bottom:50px;
+z-index:9999;
+background-color: #202124;
+border-style: solid;
+border-width: 1px;
+border-color: #5f6368;
+color: #e8eaed;
+padding: 15px 32px;
+text-align: center;
+margin: 4px 2px;
+visibility: hidden;
+}
 
-    const pmdm_checkbox = div.querySelector('#poor-mans-dark-mode-checkbox');
+#toast.show{
+visibility: visible;
+}
+`);
 
-    const toggleDarkMode = async () => {
-        if (pmdm_checkbox.checked) {
-            document.documentElement.classList.add("dark-mode-on")
-        } else {
-            document.documentElement.classList.remove("dark-mode-on")
-        }
+// defining custom toast message
+var toast = document.createElement("div");
+//toast.appendChild(document.createTextNode("Done."));
+toast.id = "toast";
+document.body.appendChild(toast);
 
-        await GM.setValue('poor-mans-dark-mode-checkbox', pmdm_checkbox.checked);
+// defining button attributes
+var btn = document.createElement("BUTTON");
+btn.innerHTML = "DUP";
+btn.id = "dupButton";
+// actually adding button into dom
+document.body.appendChild(btn);
+
+// adds event listener so that the function gets executed when the button is pressed
+document.getElementById ("dupButton").addEventListener("click", duplicates);
+
+// function to display alert
+function launch_toast(message) {
+    var x = document.getElementById("toast")
+    x.innerHTML = message;
+    x.className = "show";
+    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 1500);
+};
+
+// function to be executed on click of the button
+function duplicates() {
+  // div we want to check for duplicates
+  var dupes_field = document.getElementsByClassName("IZ65Hb-s2gQvd")[document.getElementsByClassName("IZ65Hb-s2gQvd").length -1].querySelectorAll("*")[5].innerHTML;
+
+  // splits for later use
+  var arr = dupes_field.split("<br>");
+  // makes everything lower case (just in case), splits by "- " and joins back without so we get rid of it, splits by "<br>" so we have one line per array element, sorts so duplicates are next to each other (for easier detection later)
+  var out = dupes_field.toLowerCase().split("- ").join("").split("<br>").sort();
+
+  var dupes = [];
+  // detects duplicates and puts them in array (dupes)
+  for (var i = 0; i < out.length - 1; i++) {
+    if (out[i + 1] == out[i]) {
+        dupes.push(out[i]);
     }
+  }
 
-    pmdm_checkbox.addEventListener('change', toggleDarkMode);
+  // prepares new innerHTML for the original div
+  for (i = 0; i < arr.length; i++) {
+    for (var j = 0; j < dupes.length; j++) {
+      if (arr[i].toLowerCase().replace("- ","") == dupes[j]) {
+        arr[i] = "<mark>"+arr[i]+"</mark>";
+      }
+    }
+	}
 
-    document.body.appendChild(div);
-
-    pmdm_checkbox.checked = await GM.getValue('poor-mans-dark-mode-checkbox', false);
-    toggleDarkMode();
-})();
+  // joining back the colorised things
+  var result = arr.join("<br>");
+  // writing them to dom
+  document.getElementsByClassName("IZ65Hb-s2gQvd")[document.getElementsByClassName("IZ65Hb-s2gQvd").length -1].querySelectorAll("*")[5].innerHTML = result;
+  if(dupes.length == 0) {
+    launch_toast("No duplicated.");
+  } else {
+    launch_toast("Done.");
+  };
+};
