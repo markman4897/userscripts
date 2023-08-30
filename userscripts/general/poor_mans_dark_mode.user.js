@@ -14,7 +14,7 @@
 // @run-at       document-body
 // ==/UserScript==
 
-(function() {
+(async () => {
     'use strict';
 
     // Inject CSS
@@ -56,20 +56,20 @@
 
     const pmdm_checkbox = div.querySelector('#poor-mans-dark-mode-checkbox');
 
-    const toggleDarkMode = () => {
+    const toggleDarkMode = async () => {
         if (pmdm_checkbox.checked) {
             document.documentElement.classList.add("dark-mode-on")
         } else {
             document.documentElement.classList.remove("dark-mode-on")
         }
 
-        GM.setValue('poor-mans-dark-mode-checkbox', pmdm_checkbox.checked);
+        await GM.setValue('poor-mans-dark-mode-checkbox', pmdm_checkbox.checked);
     }
 
     pmdm_checkbox.addEventListener('change', toggleDarkMode);
 
     document.body.appendChild(div);
 
-    pmdm_checkbox.checked = GM.getValue('poor-mans-dark-mode-checkbox', false);
+    pmdm_checkbox.checked = await GM.getValue('poor-mans-dark-mode-checkbox', false);
     toggleDarkMode();
 })();
