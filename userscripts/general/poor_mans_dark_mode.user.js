@@ -2,13 +2,14 @@
 // @name         Poor man's Dark Mode
 // @description  Adds a small box on bottom right that allows you to toggle dark mode.
 // @copyright    ISC licence, https://raw.githubusercontent.com/markman4897/userscripts/master/LICENCE.md
-// @version      0.3
+// @version      0.4
 // @namespace    https://github.com/markman4897/userscripts
 // @downloadURL  https://raw.githubusercontent.com/markman4897/userscripts/master/userscripts/general/poor_mans_dark_mode.user.js
 // @updateURL    https://raw.githubusercontent.com/markman4897/userscripts/master/userscripts/general/poor_mans_dark_mode.user.js
 // @author       markman4897
 // @match        *://*/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
+// @grant        GM.addStyle
 // @grant        GM.getValue
 // @grant        GM.setValue
 // @run-at       document-body
@@ -17,10 +18,7 @@
 (async () => {
     'use strict';
 
-    // Inject CSS
-    let style = document.createElement('style');
-    style.type = 'text/css';
-    style.innerText = `
+    GM.addStyle(`
         #poor-mans-dark-mode {
             position: fixed;
             bottom: 1em;
@@ -47,8 +45,8 @@
         html.dark-mode-on img,
         html.dark-mode-on svg {
             filter: invert(100%)
-        }`;
-    document.head.appendChild(style);
+        }`
+    );
 
     let div = document.createElement('div');
     div.id = 'poor-mans-dark-mode';
