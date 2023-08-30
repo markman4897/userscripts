@@ -3,12 +3,11 @@
 // @description Adds a way to search for duplicate lines in google keep. (doesn't work with tick boxes)
 // @include     *keep.google.com*
 // @grant       GM_addStyle
-// @version     1.2
+// @version     1.3
 // @namespace   https://github.com/markman4897/userscripts
 // @downloadURL https://raw.githubusercontent.com/markman4897/userscripts/master/userscripts/google_keep/google_keep_duplicates.user.js
 // @updateURL   https://raw.githubusercontent.com/markman4897/userscripts/master/userscripts/google_keep/google_keep_duplicates.user.js
 // @author      markman4897
-// @match       *://*/*
 // @icon        https://www.google.com/s2/favicons?sz=64&domain=tampermonkey.net
 // ==/UserScript==
 
