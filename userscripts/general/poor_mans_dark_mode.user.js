@@ -56,13 +56,13 @@
 
     const toggleDarkMode = async () => {
         if (pmdm_checkbox.checked) {
-            document.documentElement.classList.add("dark-mode-on")
+            document.documentElement.classList.add("dark-mode-on");
         } else {
-            document.documentElement.classList.remove("dark-mode-on")
+            document.documentElement.classList.remove("dark-mode-on");
         }
 
         await GM.setValue('poor-mans-dark-mode-checkbox', pmdm_checkbox.checked);
-    }
+    };
 
     pmdm_checkbox.addEventListener('change', toggleDarkMode);
 
